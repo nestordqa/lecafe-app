@@ -1,108 +1,361 @@
 import { create } from 'zustand';
-import { CategoryType, UserProfile } from '../types';
+import { CategoryType, UserProfile } from '../types/common';
+import { StoreState } from '@/types/store';
 
-// Define the shape of the store's state and actions
-interface StoreState {
-    profiles: UserProfile[]; // List of all user profiles
-    likedProfiles: string[]; // IDs of liked profiles
-    dislikedProfiles: string[]; // IDs of disliked profiles
-    superLikedProfiles: string[]; // IDs of super-liked profiles
-    currentCategory: CategoryType;
-    setCurrentCategory: (category: 'friendship' | 'relationship' | 'dating') => void; // Function to set the current category
-    likeProfile: (id: string) => void; // Function to like a profile
-    dislikeProfile: (id: string) => void; // Function to dislike a profile
-    superLikeProfile: (id: string) => void; // Function to super-like a profile
-    resetProfiles: () => void; // Function to reset all liked/disliked/super-liked profiles
-}
-
-// Zustand store creation
+// Zustand store
 const useStore = create<StoreState>((set) => ({
-    // Initial list of user profiles (mock data)
+    // Fake data
     profiles: [
         {
             id: '1',
-            gender: 'female',
-            name: 'Sophia',
-            lastname: 'Williams',
-            age: 28,
-            hobbies: ['Reading', 'Hiking', 'Photography'],
+            isMatch: false,
+            gender: 'femenino',
+            name: 'Sofía',
+            lastname: 'García',
+            city: 'Lima',
+            country: 'Perú',
+            age: 26,
+            hobbies: ['Leer', 'Bailar', 'Cocinar'],
             photos: [
-                'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                'https://randomuser.me/api/portraits/women/1.jpg',
+                'https://randomuser.me/api/portraits/women/2.jpg',
+                'https://randomuser.me/api/portraits/women/3.jpg',
             ],
         },
         {
             id: '2',
-            gender: 'male',
-            name: 'James',
-            lastname: 'Smith',
-            age: 32,
-            hobbies: ['Gaming', 'Cooking', 'Traveling'],
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Carlos',
+            lastname: 'Ramírez',
+            city: 'Arequipa',
+            country: 'Perú',
+            age: 29,
+            hobbies: ['Fútbol', 'Viajar', 'Fotografía'],
             photos: [
-                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                'https://randomuser.me/api/portraits/men/1.jpg',
+                'https://randomuser.me/api/portraits/men/2.jpg',
+                'https://randomuser.me/api/portraits/men/3.jpg',
             ],
         },
         {
             id: '3',
-            gender: 'female',
-            name: 'Emma',
-            lastname: 'Johnson',
-            age: 25,
-            hobbies: ['Yoga', 'Painting', 'Dancing'],
+            isMatch: true,
+            gender: 'femenino',
+            name: 'María',
+            lastname: 'Fernández',
+            city: 'Cusco',
+            country: 'Perú',
+            age: 24,
+            hobbies: ['Pintar', 'Yoga', 'Música'],
             photos: [
-                'https://images.unsplash.com/photo-1542206395-9feb3edaa68d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                'https://randomuser.me/api/portraits/women/4.jpg',
+                'https://randomuser.me/api/portraits/women/5.jpg',
+                'https://randomuser.me/api/portraits/women/6.jpg',
             ],
         },
         {
             id: '4',
-            gender: 'male',
-            name: 'Michael',
-            lastname: 'Brown',
-            age: 30,
-            hobbies: ['Sports', 'Music', 'Movies'],
+            isMatch: false,
+            gender: 'masculino',
+            name: 'José',
+            lastname: 'Torres',
+            city: 'Trujillo',
+            country: 'Perú',
+            age: 31,
+            hobbies: ['Correr', 'Leer', 'Videojuegos'],
             photos: [
-                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1530268729831-4b0b9e170218?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                'https://randomuser.me/api/portraits/men/4.jpg',
+                'https://randomuser.me/api/portraits/men/5.jpg',
+                'https://randomuser.me/api/portraits/men/6.jpg',
             ],
         },
         {
             id: '5',
-            gender: 'female',
-            name: 'Olivia',
-            lastname: 'Davis',
+            isMatch: true,
+            gender: 'femenino',
+            name: 'Lucía',
+            lastname: 'Martínez',
+            city: 'Piura',
+            country: 'Perú',
             age: 27,
-            hobbies: ['Writing', 'Running', 'Meditation'],
+            hobbies: ['Cine', 'Natación', 'Escribir'],
             photos: [
-                'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+                'https://randomuser.me/api/portraits/women/7.jpg',
+                'https://randomuser.me/api/portraits/women/8.jpg',
+                'https://randomuser.me/api/portraits/women/9.jpg',
             ],
         },
-      ],
-    likedProfiles: [], // Initially, no profiles are liked
-    dislikedProfiles: [], // Initially, no profiles are disliked
-    superLikedProfiles: [], // Initially, no profiles are super-liked
-    currentCategory: 'friendship', // Default category
+        {
+            id: '6',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Andrés',
+            lastname: 'Morales',
+            city: 'Chiclayo',
+            country: 'Perú',
+            age: 28,
+            hobbies: ['Escuchar música', 'Cocinar', 'Montar bicicleta'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/7.jpg',
+                'https://randomuser.me/api/portraits/men/8.jpg',
+                'https://randomuser.me/api/portraits/men/9.jpg',
+            ],
+        },
+        {
+            id: '7',
+            isMatch: true,
+            gender: 'femenino',
+            name: 'Valentina',
+            lastname: 'Rojas',
+            city: 'Tacna',
+            country: 'Perú',
+            age: 23,
+            hobbies: ['Dibujar', 'Viajar', 'Cantar'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/10.jpg',
+                'https://randomuser.me/api/portraits/women/11.jpg',
+                'https://randomuser.me/api/portraits/women/12.jpg',
+            ],
+        },
+        {
+            id: '8',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Miguel',
+            lastname: 'Vargas',
+            city: 'Iquitos',
+            country: 'Perú',
+            age: 33,
+            hobbies: ['Pescar', 'Cocinar', 'Leer'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/10.jpg',
+                'https://randomuser.me/api/portraits/men/11.jpg',
+                'https://randomuser.me/api/portraits/men/12.jpg',
+            ],
+        },
+        {
+            id: '9',
+            isMatch: true,
+            gender: 'femenino',
+            name: 'Camila',
+            lastname: 'Castro',
+            city: 'Huancayo',
+            country: 'Perú',
+            age: 25,
+            hobbies: ['Bailar', 'Correr', 'Ver series'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/13.jpg',
+                'https://randomuser.me/api/portraits/women/14.jpg',
+                'https://randomuser.me/api/portraits/women/15.jpg',
+            ],
+        },
+        {
+            id: '10',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Pedro',
+            lastname: 'Soto',
+            city: 'Puno',
+            country: 'Perú',
+            age: 30,
+            hobbies: ['Escalar', 'Tocar guitarra', 'Fútbol'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/13.jpg',
+                'https://randomuser.me/api/portraits/men/14.jpg',
+                'https://randomuser.me/api/portraits/men/15.jpg',
+            ],
+        },
+        {
+            id: '11',
+            isMatch: false,
+            gender: 'femenino',
+            name: 'Isabella',
+            lastname: 'Reyes',
+            city: 'Ica',
+            country: 'Perú',
+            age: 22,
+            hobbies: ['Fotografía', 'Pintar', 'Leer'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/16.jpg',
+                'https://randomuser.me/api/portraits/women/17.jpg',
+                'https://randomuser.me/api/portraits/women/18.jpg',
+            ],
+        },
+        {
+            id: '12',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Diego',
+            lastname: 'Mendoza',
+            city: 'Tumbes',
+            country: 'Perú',
+            age: 27,
+            hobbies: ['Nadar', 'Cocinar', 'Ciclismo'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/16.jpg',
+                'https://randomuser.me/api/portraits/men/17.jpg',
+                'https://randomuser.me/api/portraits/men/18.jpg',
+            ],
+        },
+        {
+            id: '13',
+            isMatch: true,
+            gender: 'femenino',
+            name: 'Gabriela',
+            lastname: 'Paredes',
+            city: 'Moquegua',
+            country: 'Perú',
+            age: 28,
+            hobbies: ['Tejer', 'Leer', 'Cocinar'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/19.jpg',
+                'https://randomuser.me/api/portraits/women/20.jpg',
+                'https://randomuser.me/api/portraits/women/21.jpg',
+            ],
+        },
+        {
+            id: '14',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Luis',
+            lastname: 'Guzmán',
+            city: 'Cajamarca',
+            country: 'Perú',
+            age: 26,
+            hobbies: ['Boxeo', 'Videojuegos', 'Viajar'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/19.jpg',
+                'https://randomuser.me/api/portraits/men/20.jpg',
+                'https://randomuser.me/api/portraits/men/21.jpg',
+            ],
+        },
+        {
+            id: '15',
+            isMatch: false,
+            gender: 'femenino',
+            name: 'Paula',
+            lastname: 'Salazar',
+            city: 'Ayacucho',
+            country: 'Perú',
+            age: 29,
+            hobbies: ['Cantar', 'Cocinar', 'Ver películas'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/22.jpg',
+                'https://randomuser.me/api/portraits/women/23.jpg',
+                'https://randomuser.me/api/portraits/women/24.jpg',
+            ],
+        },
+        {
+            id: '16',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Juan',
+            lastname: 'Ortega',
+            city: 'Pucallpa',
+            country: 'Perú',
+            age: 32,
+            hobbies: ['Pescar', 'Leer', 'Correr'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/22.jpg',
+                'https://randomuser.me/api/portraits/men/23.jpg',
+                'https://randomuser.me/api/portraits/men/24.jpg',
+            ],
+        },
+        {
+            id: '17',
+            isMatch: false,
+            gender: 'femenino',
+            name: 'Fernanda',
+            lastname: 'Aguilar',
+            city: 'Tarapoto',
+            country: 'Perú',
+            age: 24,
+            hobbies: ['Bailar', 'Yoga', 'Cocinar'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/25.jpg',
+                'https://randomuser.me/api/portraits/women/26.jpg',
+                'https://randomuser.me/api/portraits/women/27.jpg',
+            ],
+        },
+        {
+            id: '18',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Ricardo',
+            lastname: 'Peña',
+            city: 'Huaraz',
+            country: 'Perú',
+            age: 28,
+            hobbies: ['Ciclismo', 'Escalar', 'Leer'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/25.jpg',
+                'https://randomuser.me/api/portraits/men/26.jpg',
+                'https://randomuser.me/api/portraits/men/27.jpg',
+            ],
+        },
+        {
+            id: '19',
+            isMatch: true,
+            gender: 'femenino',
+            name: 'Antonia',
+            lastname: 'Campos',
+            city: 'Chimbote',
+            country: 'Perú',
+            age: 27,
+            hobbies: ['Dibujar', 'Cantar', 'Ver series'],
+            photos: [
+                'https://randomuser.me/api/portraits/women/28.jpg',
+                'https://randomuser.me/api/portraits/women/29.jpg',
+                'https://randomuser.me/api/portraits/women/30.jpg',
+            ],
+        },
+        {
+            id: '20',
+            isMatch: false,
+            gender: 'masculino',
+            name: 'Santiago',
+            lastname: 'Herrera',
+            city: 'Juliaca',
+            country: 'Perú',
+            age: 31,
+            hobbies: ['Tocar piano', 'Fútbol', 'Leer'],
+            photos: [
+                'https://randomuser.me/api/portraits/men/28.jpg',
+                'https://randomuser.me/api/portraits/men/29.jpg',
+                'https://randomuser.me/api/portraits/men/30.jpg',
+            ],
+        },
+    ],
+    likedProfiles: [], // Inicialmente sin perfiles con likes
+    dislikedProfiles: [], // Inicialmente sin perfikles con dislike
+    superLikedProfiles: [], // Inicialmente sin perfiles con superlike
+    currentCategory: 'friendship',
 
-    // Set the current category (friendship, relationship, or dating)
+    //Para elegir una nueva categoria
     setCurrentCategory: (category) => set({ currentCategory: category }),
 
-    // Add a profile ID to the likedProfiles array
-    likeProfile: (id) => set((state) => ({ likedProfiles: [...state.likedProfiles, id] })),
+    likeProfile: (id) =>
+        set((state) => ({
+          likedProfiles: [...state.likedProfiles, id],
+          profiles: state.profiles.filter((p) => p.id !== id)
+        })
+    ),
+    
+    dislikeProfile: (id) =>
+        set((state) => ({
+            dislikedProfiles: [...state.dislikedProfiles, id],
+            profiles: state.profiles.filter((p) => p.id !== id)
+        })
+    ),
+    
+    superLikeProfile: (id) =>
+        set((state) => ({
+          superLikedProfiles: [...state.superLikedProfiles, id],
+          profiles: state.profiles.filter((p) => p.id !== id),
+        })
+    ),
 
-    // Add a profile ID to the dislikedProfiles array
-    dislikeProfile: (id) => set((state) => ({ dislikedProfiles: [...state.dislikedProfiles, id] })),
-
-    // Add a profile ID to the superLikedProfiles array
-    superLikeProfile: (id) => set((state) => ({ superLikedProfiles: [...state.superLikedProfiles, id] })),
-
-    // Reset all liked, disliked, and super-liked profiles to empty arrays
     resetProfiles: () => set({ likedProfiles: [], dislikedProfiles: [], superLikedProfiles: [] }),
 }));
 
